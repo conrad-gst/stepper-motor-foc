@@ -60,8 +60,8 @@ all: main-build
 main-build: stepper_foc.elf secondary-outputs
 
 # Tool invocations
-stepper_foc.elf stepper_foc.map: $(OBJS) $(USER_OBJS) /home/conrad/Dropbox/Hobby/stm32/workspace/stepper_foc/STM32L432KCUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "stepper_foc.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/conrad/Dropbox/Hobby/stm32/workspace/stepper_foc/STM32L432KCUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stepper_foc.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+stepper_foc.elf stepper_foc.map: $(OBJS) $(USER_OBJS) /home/conrad/Schreibtisch/steper_foc_repo/stepper_foc/CubeIDE\ project/STM32L432KCUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "stepper_foc.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/conrad/Schreibtisch/steper_foc_repo/stepper_foc/CubeIDE project/STM32L432KCUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stepper_foc.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -33,18 +33,18 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define ENCODER_STEPS 4000		// steps of the encoder per revolution times four (due to quadrature read out)
-#define PWM_STEPS 1400			// The PWM timer counts from 0 to PWM_STEPS-1 with a clock of 70 MHz (PWM_STEPS 1400 results in 50 kHz PWM frequency)
+#define ENCODER_STEPS 4000					// steps of the encoder per revolution times four (due to quadrature read out)
+#define PWM_STEPS 1400						// The PWM timer counts from 0 to PWM_STEPS-1 with a clock of 70 MHz (PWM_STEPS 1400 results in 50 kHz PWM frequency)
 #define ADC_REF_VOLTAGE 3.3
-#define ADC_STEPS 4096			// 12 bit resolution
+#define ADC_STEPS 4096						// 12 bit resolution
 #define SUPPLY_VOLTAGE_DIVIDER_RATIO 11.0	// the voltage on the adc channel monitoring the supply voltage is V_supply/SUPPLY_VOLTAGE_DIVIDER_RATIO
 #define CURRENT_SENSOR_SENSITIVITY 0.3126	// sensitivity of the current sensor in V/A
-#define TS 250E-6			// period of the main loop (sampling time of the current controller) - must match the timer 16 configuration
-#define ALIGNMENT_TIME 3000	// for ALIGNMENT_TIME milliseconds, motor phase A is driven with approximately I_MAX in order to define the rotor zero position in which the d-axis and the a-axis are aligned
-#define I_MAX 1.5		    // maximal i_d, i_q currents
-#define OVERCURRENT_LIMIT 1.9     // i_a or i_b exceeding this current leads to a shutdown (overcurrent protection is only active when the current controllers are running, not during the alignment phase)
-#define MINIMAL_SUPPLY_VOLTAGE 8.0  // no pwm output if the supply voltage is below MINIMAL_SUPPLY_VOLTAGE
-#define PWM_STEPS_OFFSET 85		// due to the dead time of the H-bridge ic, a compare value of PWM_STEPS_OFFSET still produces zero output (PWM_STEPS_OFFSET is needed for compensating this effect)
+#define TS 250								// period of the main loop in microseconds (sampling time of the current controller)
+#define ALIGNMENT_TIME 3000					// for ALIGNMENT_TIME milliseconds, motor phase A is driven with approximately I_MAX in order to define the rotor zero position in which the d-axis and the a-axis are aligned
+#define I_MAX 1.5		    				// maximal i_d, i_q currents
+#define OVERCURRENT_LIMIT 1.9     			// i_a or i_b exceeding this current leads to a shutdown (over current protection is only active when the current controllers are running, not during the alignment phase)
+#define MINIMAL_SUPPLY_VOLTAGE 8.0  		// no PWM output if the supply voltage is below MINIMAL_SUPPLY_VOLTAGE
+#define PWM_STEPS_OFFSET 85					// due to the dead time of the H-bridge ic, a compare value of PWM_STEPS_OFFSET still produces zero output (PWM_STEPS_OFFSET is needed for compensating this effect)
 
 // motor parameters
 #define L 1.2E-3	// phase inductance
@@ -99,7 +99,7 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
-  // generate sin and cos tables (although periodic, generate them for all the NR electrical revolutions since the is enough memory available)
+  // generate sin and cos tables (although periodic, generate them for all the NR electrical revolutions since there is enough memory available)
   float* sin_table = malloc(ENCODER_STEPS * sizeof(float));
   float* cos_table = malloc(ENCODER_STEPS * sizeof(float));
   for (int i = 0; i < ENCODER_STEPS; i++) {
@@ -110,8 +110,8 @@ int main(void)
 
   // calculate the controller parameters
   // current controller C(z)=V*(z-exp(-R/L * Ts))/(z-1) results in closed-loop pole at 1-V/R*(1-exp(-R/L * Ts)), which must be within the unit circle
-  const float E = exp(-R/L * TS);
-  const float V = (6.0/I_MAX) < (R/(1-exp(-R/L*TS))) ? (6.0/I_MAX) : (R/(1-exp(-R/L*TS)));	/* controller gain such that for a step input i_d_ref (i_q_ref) with height I_MAX, the voltage v_d (v_q) does not exceed 6 V
+  const float E = exp(-R/L * TS * 1E-6);
+  const float V = (6.0/I_MAX) < (R/(1-exp(-R/L * TS * 1E-6))) ? (6.0/I_MAX) : (R/(1-exp(-R/L * TS * 1E-6)));	/* controller gain such that for a step input i_d_ref (i_q_ref) with height I_MAX, the voltage v_d (v_q) does not exceed 6 V
  	 and such that the closed-loop pole is within the interval [0,1) */
 
   // calculate the conversion factors for converting the ADC readings to SI units (volts or amps)
@@ -495,7 +495,7 @@ static void MX_TIM1_Init(void)
   htim1.Instance = TIM1;
   htim1.Init.Prescaler = 0;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 1400-1;
+  htim1.Init.Period = PWM_STEPS-1;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
@@ -576,7 +576,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 0;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 4000-1;
+  htim2.Init.Period = ENCODER_STEPS-1;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
@@ -622,7 +622,7 @@ static void MX_TIM16_Init(void)
   htim16.Instance = TIM16;
   htim16.Init.Prescaler = 70-1;
   htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim16.Init.Period = 250-1;
+  htim16.Init.Period = TS-1;
   htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim16.Init.RepetitionCounter = 0;
   htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;

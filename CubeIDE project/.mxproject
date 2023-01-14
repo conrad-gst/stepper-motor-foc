@@ -9,17 +9,17 @@ CDefines=USE_HAL_DRIVER;STM32L432xx;USE_HAL_DRIVER;USE_HAL_DRIVER;
 [PreviousGenFiles]
 AdvancedFolderStructure=true
 HeaderFileListSize=3
-HeaderFiles#0=/home/conrad/Dropbox/Hobby/stm32/workspace/stepper_foc/Core/Inc/stm32l4xx_it.h
-HeaderFiles#1=/home/conrad/Dropbox/Hobby/stm32/workspace/stepper_foc/Core/Inc/stm32l4xx_hal_conf.h
-HeaderFiles#2=/home/conrad/Dropbox/Hobby/stm32/workspace/stepper_foc/Core/Inc/main.h
+HeaderFiles#0=/home/conrad/Schreibtisch/steper_foc_repo/stepper_foc/CubeIDE project/Core/Inc/stm32l4xx_it.h
+HeaderFiles#1=/home/conrad/Schreibtisch/steper_foc_repo/stepper_foc/CubeIDE project/Core/Inc/stm32l4xx_hal_conf.h
+HeaderFiles#2=/home/conrad/Schreibtisch/steper_foc_repo/stepper_foc/CubeIDE project/Core/Inc/main.h
 HeaderFolderListSize=1
-HeaderPath#0=/home/conrad/Dropbox/Hobby/stm32/workspace/stepper_foc/Core/Inc
+HeaderPath#0=/home/conrad/Schreibtisch/steper_foc_repo/stepper_foc/CubeIDE project/Core/Inc
 HeaderFiles=;
 SourceFileListSize=3
-SourceFiles#0=/home/conrad/Dropbox/Hobby/stm32/workspace/stepper_foc/Core/Src/stm32l4xx_it.c
-SourceFiles#1=/home/conrad/Dropbox/Hobby/stm32/workspace/stepper_foc/Core/Src/stm32l4xx_hal_msp.c
-SourceFiles#2=/home/conrad/Dropbox/Hobby/stm32/workspace/stepper_foc/Core/Src/main.c
+SourceFiles#0=/home/conrad/Schreibtisch/steper_foc_repo/stepper_foc/CubeIDE project/Core/Src/stm32l4xx_it.c
+SourceFiles#1=/home/conrad/Schreibtisch/steper_foc_repo/stepper_foc/CubeIDE project/Core/Src/stm32l4xx_hal_msp.c
+SourceFiles#2=/home/conrad/Schreibtisch/steper_foc_repo/stepper_foc/CubeIDE project/Core/Src/main.c
 SourceFolderListSize=1
-SourcePath#0=/home/conrad/Dropbox/Hobby/stm32/workspace/stepper_foc/Core/Src
+SourcePath#0=/home/conrad/Schreibtisch/steper_foc_repo/stepper_foc/CubeIDE project/Core/Src
 SourceFiles=;
 

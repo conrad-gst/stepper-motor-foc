@@ -39,11 +39,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  17 .debug_line   00010125  00000000  00000000  00055aed  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000d712c  00000000  00000000  00065c12  2**0
+ 18 .debug_str    000d7138  00000000  00000000  00065c12  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  0013cd3e  2**0
+ 19 .comment      00000050  00000000  00000000  0013cd4a  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  000046a0  00000000  00000000  0013cd90  2**2
+ 20 .debug_frame  000046a0  00000000  00000000  0013cd9c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -910,7 +910,7 @@ int main(void)
  8000b74:	af00      	add	r7, sp, #0
   /* USER CODE BEGIN 1 */
 
-  // generate sin and cos tables (although periodic, generate them for all the NR electrical revolutions since the is enough memory available)
+  // generate sin and cos tables (although periodic, generate them for all the NR electrical revolutions since there is enough memory available)
   float* sin_table = malloc(ENCODER_STEPS * sizeof(float));
  8000b76:	f44f 507a 	mov.w	r0, #16000	; 0x3e80
  8000b7a:	f005 f99f 	bl	8005ebc <malloc>
@@ -989,10 +989,10 @@ int main(void)
 
   // calculate the controller parameters
   // current controller C(z)=V*(z-exp(-R/L * Ts))/(z-1) results in closed-loop pole at 1-V/R*(1-exp(-R/L * Ts)), which must be within the unit circle
-  const float E = exp(-R/L * TS);
+  const float E = exp(-R/L * TS * 1E-6);
  8000c36:	4b8b      	ldr	r3, [pc, #556]	; (8000e64 <main+0x2f4>)
  8000c38:	657b      	str	r3, [r7, #84]	; 0x54
-  const float V = (6.0/I_MAX) < (R/(1-exp(-R/L*TS))) ? (6.0/I_MAX) : (R/(1-exp(-R/L*TS)));	/* controller gain such that for a step input i_d_ref (i_q_ref) with height I_MAX, the voltage v_d (v_q) does not exceed 6 V
+  const float V = (6.0/I_MAX) < (R/(1-exp(-R/L * TS * 1E-6))) ? (6.0/I_MAX) : (R/(1-exp(-R/L * TS * 1E-6)));	/* controller gain such that for a step input i_d_ref (i_q_ref) with height I_MAX, the voltage v_d (v_q) does not exceed 6 V
  8000c3a:	f04f 4381 	mov.w	r3, #1082130432	; 0x40800000
  8000c3e:	653b      	str	r3, [r7, #80]	; 0x50
  	 and such that the closed-loop pole is within the interval [0,1) */
@@ -2023,7 +2023,7 @@ static void MX_TIM1_Init(void)
  8001396:	4b48      	ldr	r3, [pc, #288]	; (80014b8 <MX_TIM1_Init+0x160>)
  8001398:	2200      	movs	r2, #0
  800139a:	609a      	str	r2, [r3, #8]
-  htim1.Init.Period = 1400-1;
+  htim1.Init.Period = PWM_STEPS-1;
  800139c:	4b46      	ldr	r3, [pc, #280]	; (80014b8 <MX_TIM1_Init+0x160>)
  800139e:	f240 5277 	movw	r2, #1399	; 0x577
  80013a2:	60da      	str	r2, [r3, #12]
@@ -2247,7 +2247,7 @@ static void MX_TIM2_Init(void)
  80014ec:	4b1d      	ldr	r3, [pc, #116]	; (8001564 <MX_TIM2_Init+0xa4>)
  80014ee:	2200      	movs	r2, #0
  80014f0:	609a      	str	r2, [r3, #8]
-  htim2.Init.Period = 4000-1;
+  htim2.Init.Period = ENCODER_STEPS-1;
  80014f2:	4b1c      	ldr	r3, [pc, #112]	; (8001564 <MX_TIM2_Init+0xa4>)
  80014f4:	f640 729f 	movw	r2, #3999	; 0xf9f
  80014f8:	60da      	str	r2, [r3, #12]
@@ -2353,7 +2353,7 @@ static void MX_TIM16_Init(void)
  8001578:	4b0c      	ldr	r3, [pc, #48]	; (80015ac <MX_TIM16_Init+0x44>)
  800157a:	2200      	movs	r2, #0
  800157c:	609a      	str	r2, [r3, #8]
-  htim16.Init.Period = 250-1;
+  htim16.Init.Period = TS-1;
  800157e:	4b0b      	ldr	r3, [pc, #44]	; (80015ac <MX_TIM16_Init+0x44>)
  8001580:	22f9      	movs	r2, #249	; 0xf9
  8001582:	60da      	str	r2, [r3, #12]
